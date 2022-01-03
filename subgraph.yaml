@@ -1,0 +1,44 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: PAYCMarketplace
+    network: rinkeby
+    source:
+      address: "0xd2d69f530dd343eaa0bbc03ddd099cef0855da52"
+      abi: PAYCMarketplace
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - OwnershipTransferred
+        - Paused
+        - PaycBidEntered
+        - PaycBidWithdrawn
+        - PaycBought
+        - PaycNoLongerForSale
+        - PaycOffered
+        - Unpaused
+      abis:
+        - name: PAYCMarketplace
+          file: ./abis/PAYCMarketplace.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: PaycBidEntered(indexed uint256,uint256,indexed address)
+          handler: handlePaycBidEntered
+        - event: PaycBidWithdrawn(indexed uint256,uint256,indexed address)
+          handler: handlePaycBidWithdrawn
+        - event: PaycBought(indexed uint256,uint256,indexed address,indexed address)
+          handler: handlePaycBought
+        - event: PaycNoLongerForSale(indexed uint256)
+          handler: handlePaycNoLongerForSale
+        - event: PaycOffered(indexed uint256,uint256,indexed address)
+          handler: handlePaycOffered
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/mapping.ts
