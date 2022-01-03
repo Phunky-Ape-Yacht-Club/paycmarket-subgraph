@@ -1,6 +1,6 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
+type Bid @entity {
+  isForSale: Boolean!
+  paycIndex: Int!
+  minValue: String! # address
+  newOwner: String! # address
 }
