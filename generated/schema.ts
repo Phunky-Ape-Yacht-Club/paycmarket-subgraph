@@ -11,31 +11,31 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ExampleEntity extends Entity {
+export class PhunkyApe extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("count", Value.fromBigInt(BigInt.zero()));
-    this.set("previousOwner", Value.fromBytes(Bytes.empty()));
-    this.set("newOwner", Value.fromBytes(Bytes.empty()));
+    this.set("minValue", Value.fromString(""));
+    this.set("currentOwner", Value.fromBytes(Bytes.empty()));
+    this.set("blockNumberListedForSale", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ExampleEntity entity without an ID");
+    assert(id != null, "Cannot save PhunkyApe entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save ExampleEntity entity with non-string ID. " +
+        "Cannot save PhunkyApe entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("ExampleEntity", id.toString(), this);
+      store.set("PhunkyApe", id.toString(), this);
     }
   }
 
-  static load(id: string): ExampleEntity | null {
-    return changetype<ExampleEntity | null>(store.get("ExampleEntity", id));
+  static load(id: string): PhunkyApe | null {
+    return changetype<PhunkyApe | null>(store.get("PhunkyApe", id));
   }
 
   get id(): string {
@@ -47,30 +47,112 @@ export class ExampleEntity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get count(): BigInt {
-    let value = this.get("count");
-    return value!.toBigInt();
+  get isForSale(): boolean {
+    let value = this.get("isForSale");
+    return value!.toBoolean();
   }
 
-  set count(value: BigInt) {
-    this.set("count", Value.fromBigInt(value));
+  set isForSale(value: boolean) {
+    this.set("isForSale", Value.fromBoolean(value));
   }
 
-  get previousOwner(): Bytes {
-    let value = this.get("previousOwner");
+  get minValue(): string {
+    let value = this.get("minValue");
+    return value!.toString();
+  }
+
+  set minValue(value: string) {
+    this.set("minValue", Value.fromString(value));
+  }
+
+  get currentOwner(): Bytes {
+    let value = this.get("currentOwner");
     return value!.toBytes();
   }
 
-  set previousOwner(value: Bytes) {
-    this.set("previousOwner", Value.fromBytes(value));
+  set currentOwner(value: Bytes) {
+    this.set("currentOwner", Value.fromBytes(value));
   }
 
-  get newOwner(): Bytes {
-    let value = this.get("newOwner");
+  get blockNumberListedForSale(): string {
+    let value = this.get("blockNumberListedForSale");
+    return value!.toString();
+  }
+
+  set blockNumberListedForSale(value: string) {
+    this.set("blockNumberListedForSale", Value.fromString(value));
+  }
+}
+
+export class PhunkyApeSale extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("salePrice", Value.fromString(""));
+    this.set("soldFrom", Value.fromBytes(Bytes.empty()));
+    this.set("soldTo", Value.fromBytes(Bytes.empty()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save PhunkyApeSale entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save PhunkyApeSale entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("PhunkyApeSale", id.toString(), this);
+    }
+  }
+
+  static load(id: string): PhunkyApeSale | null {
+    return changetype<PhunkyApeSale | null>(store.get("PhunkyApeSale", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get blockNumber(): i32 {
+    let value = this.get("blockNumber");
+    return value!.toI32();
+  }
+
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
+  }
+
+  get salePrice(): string {
+    let value = this.get("salePrice");
+    return value!.toString();
+  }
+
+  set salePrice(value: string) {
+    this.set("salePrice", Value.fromString(value));
+  }
+
+  get soldFrom(): Bytes {
+    let value = this.get("soldFrom");
     return value!.toBytes();
   }
 
-  set newOwner(value: Bytes) {
-    this.set("newOwner", Value.fromBytes(value));
+  set soldFrom(value: Bytes) {
+    this.set("soldFrom", Value.fromBytes(value));
+  }
+
+  get soldTo(): Bytes {
+    let value = this.get("soldTo");
+    return value!.toBytes();
+  }
+
+  set soldTo(value: Bytes) {
+    this.set("soldTo", Value.fromBytes(value));
   }
 }
