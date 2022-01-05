@@ -93,6 +93,7 @@ export class PhunkyApeSale extends Entity {
     this.set("salePrice", Value.fromString(""));
     this.set("soldFrom", Value.fromBytes(Bytes.empty()));
     this.set("soldTo", Value.fromBytes(Bytes.empty()));
+    this.set("phunkyApeId", Value.fromString(""));
   }
 
   save(): void {
@@ -155,6 +156,15 @@ export class PhunkyApeSale extends Entity {
 
   set soldTo(value: Bytes) {
     this.set("soldTo", Value.fromBytes(value));
+  }
+
+  get phunkyApeId(): string {
+    let value = this.get("phunkyApeId");
+    return value!.toString();
+  }
+
+  set phunkyApeId(value: string) {
+    this.set("phunkyApeId", Value.fromString(value));
   }
 }
 

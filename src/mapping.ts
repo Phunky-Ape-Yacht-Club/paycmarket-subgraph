@@ -61,6 +61,7 @@ export function handlePaycBought(event: PaycBought): void {
   paycBought.salePrice = event.params.value.toString();
   paycBought.soldFrom = event.params.fromAddress;
   paycBought.soldTo = event.params.toAddress;
+  paycBought.phunkyApeId = id;
   paycBought.save()
 }
 

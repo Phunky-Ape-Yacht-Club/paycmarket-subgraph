@@ -13,6 +13,7 @@ type PhunkyApeSale @entity {
   salePrice: String!
   soldFrom: Bytes! # address
   soldTo: Bytes! # address
+  phunkyApeId: String!
 }
 
 
