@@ -42,19 +42,19 @@ export function handlePaycBought(event: PaycBought): void {
   let id = event.params.paycIndex.toHex();
   let ape = PhunkyApe.load(id);
   if (ape == null) {
-    ape = new PhunkyApe(id)
+    ape = new PhunkyApe(id);
   }
   ape.isForSale = false;
-  ape.currentOwner = event.transaction.from
+  ape.currentOwner = event.transaction.from;
   ape.blockNumberListedForSale = event.block.number.toString();
-  ape.save()
+  ape.save();
 }
 
 export function handlePaycNoLongerForSale(event: PaycNoLongerForSale): void {
   let id = event.params.paycIndex.toHex();
   let ape = PhunkyApe.load(id);
   if (ape == null) {
-    ape = new PhunkyApe(id)
+    ape = new PhunkyApe(id);
   }
   ape.isForSale = false;
   ape.save();
@@ -68,7 +68,7 @@ export function handlePaycOffered(event: PaycOffered): void {
   }
   ape.isForSale = true;
   ape.minValue = event.params.minValue.toString()
-  ape.currentOwner = event.transaction.from
+  ape.currentOwner = event.transaction.from;
   ape.save()
 }
 
