@@ -10,7 +10,7 @@ import {
   PaycOffered,
   Unpaused
 } from "../generated/PAYCMarketplace/PAYCMarketplace"
-import { PhunkyApe, Bid } from "../generated/schema"
+import { PhunkyApe, Bid, PhunkyApeSale } from "../generated/schema"
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
@@ -44,10 +44,24 @@ export function handlePaycBought(event: PaycBought): void {
   if (ape == null) {
     ape = new PhunkyApe(id);
   }
+
+  let saleId = event.transactionLogIndex.toHex() + event.transaction.hash.toHex()
+  let paycBought = PhunkyApeSale.load(saleId);
+  if (paycBought == null) {
+    paycBought = new PhunkyApeSale(saleId)
+  }
+
+  // update ape entity
   ape.isForSale = false;
   ape.currentOwner = event.transaction.from;
-  ape.blockNumberListedForSale = event.block.number.toString();
   ape.save();
+
+  // update sale entity
+  paycBought.blockNumber = event.block.number.toString();
+  paycBought.salePrice = event.params.value.toString();
+  paycBought.soldFrom = event.params.fromAddress;
+  paycBought.soldTo = event.params.toAddress;
+  paycBought.save()
 }
 
 export function handlePaycNoLongerForSale(event: PaycNoLongerForSale): void {
@@ -69,6 +83,7 @@ export function handlePaycOffered(event: PaycOffered): void {
   ape.isForSale = true;
   ape.minValue = event.params.minValue.toString()
   ape.currentOwner = event.transaction.from;
+  ape.blockNumberListedForSale = event.block.number.toString();
   ape.save()
 }
 
