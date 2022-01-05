@@ -89,6 +89,7 @@ export class PhunkyApeSale extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
+    this.set("blockNumber", Value.fromString(""));
     this.set("salePrice", Value.fromString(""));
     this.set("soldFrom", Value.fromBytes(Bytes.empty()));
     this.set("soldTo", Value.fromBytes(Bytes.empty()));
@@ -120,13 +121,13 @@ export class PhunkyApeSale extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get blockNumber(): i32 {
+  get blockNumber(): string {
     let value = this.get("blockNumber");
-    return value!.toI32();
+    return value!.toString();
   }
 
-  set blockNumber(value: i32) {
-    this.set("blockNumber", Value.fromI32(value));
+  set blockNumber(value: string) {
+    this.set("blockNumber", Value.fromString(value));
   }
 
   get salePrice(): string {
@@ -154,5 +155,69 @@ export class PhunkyApeSale extends Entity {
 
   set soldTo(value: Bytes) {
     this.set("soldTo", Value.fromBytes(value));
+  }
+}
+
+export class Bid extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("bidAmount", Value.fromString(""));
+    this.set("blockNumber", Value.fromString(""));
+    this.set("phunkyApeId", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Bid entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Bid entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Bid", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Bid | null {
+    return changetype<Bid | null>(store.get("Bid", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get bidAmount(): string {
+    let value = this.get("bidAmount");
+    return value!.toString();
+  }
+
+  set bidAmount(value: string) {
+    this.set("bidAmount", Value.fromString(value));
+  }
+
+  get blockNumber(): string {
+    let value = this.get("blockNumber");
+    return value!.toString();
+  }
+
+  set blockNumber(value: string) {
+    this.set("blockNumber", Value.fromString(value));
+  }
+
+  get phunkyApeId(): string {
+    let value = this.get("phunkyApeId");
+    return value!.toString();
+  }
+
+  set phunkyApeId(value: string) {
+    this.set("phunkyApeId", Value.fromString(value));
   }
 }

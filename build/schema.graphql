@@ -9,8 +9,16 @@ type PhunkyApe @entity {
 
 type PhunkyApeSale @entity {
   id: ID!
-  blockNumber: Int!
+  blockNumber: String!
   salePrice: String!
   soldFrom: Bytes! # address
   soldTo: Bytes! # address
+}
+
+
+type Bid @entity {
+  id: ID!
+  bidAmount: String!
+  blockNumber: String!
+  phunkyApeId: String!
 }
