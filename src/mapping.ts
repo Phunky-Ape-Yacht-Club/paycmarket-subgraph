@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, store } from "@graphprotocol/graph-ts"
 import {
   PAYCMarketplace,
   OwnershipTransferred,
@@ -35,7 +35,11 @@ export function handlePaycBidEntered(event: PaycBidEntered): void {
 }
 
 export function handlePaycBidWithdrawn(event: PaycBidWithdrawn): void {
-
+  let id = event.transaction.from.toHex() + "-" + event.params.paycIndex.toString();
+  let bid = Bid.load(id)
+  if (bid !== null) {
+    store.remove('Bid', id)
+  }
 }
 
 export function handlePaycBought(event: PaycBought): void {
