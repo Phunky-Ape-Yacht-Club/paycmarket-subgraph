@@ -10,9 +10,24 @@ import {
   PaycOffered,
   Unpaused
 } from "../generated/PAYCMarketplace/PAYCMarketplace"
+
+import {
+  Transfer
+} from "../generated/PAYC/PAYC"
 import { PhunkyApe, Bid, PhunkyApeSale } from "../generated/schema"
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+}
+
+export function handleTransfer(event: Transfer): void {
+  let id = event.params.tokenId.toHex();
+  let ape = PhunkyApe.load(id)
+  if (ape == null) {
+    ape = new PhunkyApe(id)
+  }
+  ape.currentOwner = event.params.to;
+  ape.isForSale = false;
+  ape.save();
 }
 
 export function handlePaused(event: Paused): void {}

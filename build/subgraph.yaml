@@ -43,3 +43,23 @@ dataSources:
         - event: Unpaused(address)
           handler: handleUnpaused
       file: PAYCMarketplace/PAYCMarketplace.wasm
+  - kind: ethereum
+    name: PAYC
+    network: rinkeby
+    source:
+      address: "0xC3C412164822C42F94D14F61620921d22ecbc621"
+      abi: PAYC
+      startBlock: 9910016
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: PAYC
+          file: PAYC/abis/PAYC.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: PAYCMarketplace/PAYCMarketplace.wasm
