@@ -46,6 +46,7 @@ export function handlePaycBidEntered(event: PaycBidEntered): void {
   bid.bidAmount = event.transaction.value.toString();
   bid.blockNumber = event.block.number.toString();
   bid.phunkyApe = event.params.paycIndex.toHex()
+  bid.from = event.params.fromAddress;
   bid.save()
 }
 

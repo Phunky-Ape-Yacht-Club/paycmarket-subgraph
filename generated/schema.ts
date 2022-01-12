@@ -194,6 +194,7 @@ export class Bid extends Entity {
     this.set("bidAmount", Value.fromString(""));
     this.set("blockNumber", Value.fromString(""));
     this.set("phunkyApe", Value.fromString(""));
+    this.set("from", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -247,5 +248,14 @@ export class Bid extends Entity {
 
   set phunkyApe(value: string) {
     this.set("phunkyApe", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 }

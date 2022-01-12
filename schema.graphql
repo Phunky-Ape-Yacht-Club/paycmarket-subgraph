@@ -24,4 +24,5 @@ type Bid @entity {
   bidAmount: String!
   blockNumber: String!
   phunkyApe: PhunkyApe!
+  from: Bytes! # address of bidder
 }
