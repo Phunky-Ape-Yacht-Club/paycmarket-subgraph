@@ -82,6 +82,24 @@ export class PhunkyApe extends Entity {
   set blockNumberListedForSale(value: string) {
     this.set("blockNumberListedForSale", Value.fromString(value));
   }
+
+  get phunkyApeSales(): Array<string> {
+    let value = this.get("phunkyApeSales");
+    return value!.toStringArray();
+  }
+
+  set phunkyApeSales(value: Array<string>) {
+    this.set("phunkyApeSales", Value.fromStringArray(value));
+  }
+
+  get phunkyApeBids(): Array<string> {
+    let value = this.get("phunkyApeBids");
+    return value!.toStringArray();
+  }
+
+  set phunkyApeBids(value: Array<string>) {
+    this.set("phunkyApeBids", Value.fromStringArray(value));
+  }
 }
 
 export class PhunkyApeSale extends Entity {
@@ -93,7 +111,7 @@ export class PhunkyApeSale extends Entity {
     this.set("salePrice", Value.fromString(""));
     this.set("soldFrom", Value.fromBytes(Bytes.empty()));
     this.set("soldTo", Value.fromBytes(Bytes.empty()));
-    this.set("phunkyApeId", Value.fromString(""));
+    this.set("phunkyApe", Value.fromString(""));
   }
 
   save(): void {
@@ -158,13 +176,13 @@ export class PhunkyApeSale extends Entity {
     this.set("soldTo", Value.fromBytes(value));
   }
 
-  get phunkyApeId(): string {
-    let value = this.get("phunkyApeId");
+  get phunkyApe(): string {
+    let value = this.get("phunkyApe");
     return value!.toString();
   }
 
-  set phunkyApeId(value: string) {
-    this.set("phunkyApeId", Value.fromString(value));
+  set phunkyApe(value: string) {
+    this.set("phunkyApe", Value.fromString(value));
   }
 }
 
@@ -175,7 +193,7 @@ export class Bid extends Entity {
 
     this.set("bidAmount", Value.fromString(""));
     this.set("blockNumber", Value.fromString(""));
-    this.set("phunkyApeId", Value.fromString(""));
+    this.set("phunkyApe", Value.fromString(""));
   }
 
   save(): void {
@@ -222,12 +240,12 @@ export class Bid extends Entity {
     this.set("blockNumber", Value.fromString(value));
   }
 
-  get phunkyApeId(): string {
-    let value = this.get("phunkyApeId");
+  get phunkyApe(): string {
+    let value = this.get("phunkyApe");
     return value!.toString();
   }
 
-  set phunkyApeId(value: string) {
-    this.set("phunkyApeId", Value.fromString(value));
+  set phunkyApe(value: string) {
+    this.set("phunkyApe", Value.fromString(value));
   }
 }

@@ -4,6 +4,8 @@ type PhunkyApe @entity {
   minValue: String! # address
   currentOwner: Bytes!
   blockNumberListedForSale: String!
+  phunkyApeSales: [PhunkyApeSale!]! @derivedFrom(field: "phunkyApe")
+  phunkyApeBids: [Bid!]! @derivedFrom(field: "phunkyApe")
 }
 
 
@@ -13,7 +15,7 @@ type PhunkyApeSale @entity {
   salePrice: String!
   soldFrom: Bytes! # address
   soldTo: Bytes! # address
-  phunkyApeId: String!
+  phunkyApe: PhunkyApe!
 }
 
 
@@ -21,5 +23,5 @@ type Bid @entity {
   id: ID!
   bidAmount: String!
   blockNumber: String!
-  phunkyApeId: String!
+  phunkyApe: PhunkyApe!
 }
