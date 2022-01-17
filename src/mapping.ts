@@ -33,16 +33,11 @@ export function handleTransfer(event: Transfer): void {
 export function handlePaused(event: Paused): void {}
 
 export function handlePaycBidEntered(event: PaycBidEntered): void {
-  let id = event.transaction.from.toHex() + "-" + event.params.paycIndex.toString();
+  let id = event.params.paycIndex.toString();
   let bid = Bid.load(id)
-  let ape = PhunkyApe.load(event.params.paycIndex.toHex());
   if (bid == null) {
     bid = new Bid(id)
   }
-  if (ape == null) {
-    ape = new PhunkyApe(event.params.paycIndex.toHex())
-  }
-
   bid.bidAmount = event.transaction.value.toString();
   bid.blockNumber = event.block.number.toString();
   bid.phunkyApe = event.params.paycIndex.toHex()
@@ -51,7 +46,7 @@ export function handlePaycBidEntered(event: PaycBidEntered): void {
 }
 
 export function handlePaycBidWithdrawn(event: PaycBidWithdrawn): void {
-  let id = event.transaction.from.toHex() + "-" + event.params.paycIndex.toString();
+  let id = event.params.paycIndex.toString();
   let bid = Bid.load(id)
   if (bid !== null) {
     store.remove('Bid', id)
@@ -61,28 +56,32 @@ export function handlePaycBidWithdrawn(event: PaycBidWithdrawn): void {
 export function handlePaycBought(event: PaycBought): void {
   let id = event.params.paycIndex.toHex();
   let ape = PhunkyApe.load(id);
+  let bid = Bid.load(id)
+
+  // Check for the case where there is a bid from the new owner and refund it.
+  // Any other bid can stay in place.
+  if (bid !== null && bid.from == event.params.toAddress) {
+    store.remove("Bid", id)
+  }
   if (ape == null) {
     ape = new PhunkyApe(id);
   }
-
   let saleId = event.transactionLogIndex.toHex() + event.transaction.hash.toHex()
-  let paycBought = PhunkyApeSale.load(saleId);
-  if (paycBought == null) {
-    paycBought = new PhunkyApeSale(saleId)
+  let phunkyApeSale = PhunkyApeSale.load(saleId);
+  if (phunkyApeSale == null) {
+    phunkyApeSale = new PhunkyApeSale(saleId)
   }
 
   // update ape entity
   ape.isForSale = false;
-  ape.currentOwner = event.transaction.from;
-  ape.save();
 
   // update sale entity
-  paycBought.blockNumber = event.block.number.toString();
-  paycBought.salePrice = event.params.value.toString();
-  paycBought.soldFrom = event.params.fromAddress;
-  paycBought.soldTo = event.params.toAddress;
-  paycBought.phunkyApe = id;
-  paycBought.save()
+  phunkyApeSale.blockNumber = event.block.number.toString();
+  phunkyApeSale.salePrice = event.params.value.toString();
+  phunkyApeSale.soldFrom = event.params.fromAddress;
+  phunkyApeSale.soldTo = event.params.toAddress;
+  phunkyApeSale.phunkyApe = id;
+  phunkyApeSale.save()
 }
 
 export function handlePaycNoLongerForSale(event: PaycNoLongerForSale): void {
@@ -103,7 +102,6 @@ export function handlePaycOffered(event: PaycOffered): void {
   }
   ape.isForSale = true;
   ape.minValue = event.params.minValue.toString()
-  ape.currentOwner = event.transaction.from;
   ape.blockNumberListedForSale = event.block.number.toString();
   ape.save()
 }
