@@ -83,13 +83,13 @@ export class PhunkyApe extends Entity {
     this.set("blockNumberListedForSale", Value.fromString(value));
   }
 
-  get phunkyApeSales(): Array<string> {
-    let value = this.get("phunkyApeSales");
+  get phunkyApeTransfers(): Array<string> {
+    let value = this.get("phunkyApeTransfers");
     return value!.toStringArray();
   }
 
-  set phunkyApeSales(value: Array<string>) {
-    this.set("phunkyApeSales", Value.fromStringArray(value));
+  set phunkyApeTransfers(value: Array<string>) {
+    this.set("phunkyApeTransfers", Value.fromStringArray(value));
   }
 
   get phunkyApeBids(): Array<string> {
@@ -102,33 +102,34 @@ export class PhunkyApe extends Entity {
   }
 }
 
-export class PhunkyApeSale extends Entity {
+export class PhunkyApeTransfer extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
     this.set("blockNumber", Value.fromString(""));
-    this.set("salePrice", Value.fromString(""));
-    this.set("soldFrom", Value.fromBytes(Bytes.empty()));
-    this.set("soldTo", Value.fromBytes(Bytes.empty()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("to", Value.fromBytes(Bytes.empty()));
     this.set("phunkyApe", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save PhunkyApeSale entity without an ID");
+    assert(id != null, "Cannot save PhunkyApeTransfer entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save PhunkyApeSale entity with non-string ID. " +
+        "Cannot save PhunkyApeTransfer entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("PhunkyApeSale", id.toString(), this);
+      store.set("PhunkyApeTransfer", id.toString(), this);
     }
   }
 
-  static load(id: string): PhunkyApeSale | null {
-    return changetype<PhunkyApeSale | null>(store.get("PhunkyApeSale", id));
+  static load(id: string): PhunkyApeTransfer | null {
+    return changetype<PhunkyApeTransfer | null>(
+      store.get("PhunkyApeTransfer", id)
+    );
   }
 
   get id(): string {
@@ -149,31 +150,48 @@ export class PhunkyApeSale extends Entity {
     this.set("blockNumber", Value.fromString(value));
   }
 
-  get salePrice(): string {
+  get isSale(): boolean {
+    let value = this.get("isSale");
+    return value!.toBoolean();
+  }
+
+  set isSale(value: boolean) {
+    this.set("isSale", Value.fromBoolean(value));
+  }
+
+  get salePrice(): string | null {
     let value = this.get("salePrice");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set salePrice(value: string) {
-    this.set("salePrice", Value.fromString(value));
+  set salePrice(value: string | null) {
+    if (!value) {
+      this.unset("salePrice");
+    } else {
+      this.set("salePrice", Value.fromString(<string>value));
+    }
   }
 
-  get soldFrom(): Bytes {
-    let value = this.get("soldFrom");
+  get from(): Bytes {
+    let value = this.get("from");
     return value!.toBytes();
   }
 
-  set soldFrom(value: Bytes) {
-    this.set("soldFrom", Value.fromBytes(value));
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
-  get soldTo(): Bytes {
-    let value = this.get("soldTo");
+  get to(): Bytes {
+    let value = this.get("to");
     return value!.toBytes();
   }
 
-  set soldTo(value: Bytes) {
-    this.set("soldTo", Value.fromBytes(value));
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
   }
 
   get phunkyApe(): string {

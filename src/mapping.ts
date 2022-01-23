@@ -14,13 +14,32 @@ import {
 import {
   Transfer
 } from "../generated/PAYC/PAYC"
-import { PhunkyApe, Bid, PhunkyApeSale } from "../generated/schema"
+import { PhunkyApe, Bid, PhunkyApeTransfer } from "../generated/schema"
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 export function handleTransfer(event: Transfer): void {
   let id = event.params.tokenId.toHex();
+  let transferId = event.transactionLogIndex.toHex() + event.transaction.hash.toHex()
+  let phunkyApeTransfer = PhunkyApeTransfer.load(transferId);
+
+  if (phunkyApeTransfer == null) {
+    phunkyApeTransfer = new PhunkyApeTransfer(transferId)
+  }
+  phunkyApeTransfer.isSale = false;
+
+  if (event.transaction.value > BigInt.fromI32(0)) {
+    phunkyApeTransfer.salePrice = event.transaction.value.toString();
+    phunkyApeTransfer.isSale = true;
+  }
+
+  phunkyApeTransfer.from = event.params.from
+  phunkyApeTransfer.to = event.params.to
+  phunkyApeTransfer.phunkyApe = id;
+
+  phunkyApeTransfer.save()
+
   let ape = PhunkyApe.load(id)
   if (ape == null) {
     ape = new PhunkyApe(id)
@@ -66,22 +85,23 @@ export function handlePaycBought(event: PaycBought): void {
   if (ape == null) {
     ape = new PhunkyApe(id);
   }
-  let saleId = event.transactionLogIndex.toHex() + event.transaction.hash.toHex()
-  let phunkyApeSale = PhunkyApeSale.load(saleId);
-  if (phunkyApeSale == null) {
-    phunkyApeSale = new PhunkyApeSale(saleId)
+  let transferId = event.transactionLogIndex.toHex() + event.transaction.hash.toHex()
+  let phunkyApeTransfer = PhunkyApeTransfer.load(transferId);
+  if (phunkyApeTransfer == null) {
+    phunkyApeTransfer = new PhunkyApeTransfer(transferId)
   }
 
   // update ape entity
   ape.isForSale = false;
 
   // update sale entity
-  phunkyApeSale.blockNumber = event.block.number.toString();
-  phunkyApeSale.salePrice = event.params.value.toString();
-  phunkyApeSale.soldFrom = event.params.fromAddress;
-  phunkyApeSale.soldTo = event.params.toAddress;
-  phunkyApeSale.phunkyApe = id;
-  phunkyApeSale.save()
+  phunkyApeTransfer.blockNumber = event.block.number.toString();
+  phunkyApeTransfer.salePrice = event.params.value.toString();
+  phunkyApeTransfer.isSale = true;
+  phunkyApeTransfer.from = event.params.fromAddress;
+  phunkyApeTransfer.to = event.params.toAddress;
+  phunkyApeTransfer.phunkyApe = id;
+  phunkyApeTransfer.save()
 }
 
 export function handlePaycNoLongerForSale(event: PaycNoLongerForSale): void {
