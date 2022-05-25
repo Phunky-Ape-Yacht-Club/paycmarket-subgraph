@@ -29,11 +29,6 @@ export function handleTransfer(event: Transfer): void {
   }
   phunkyApeTransfer.isSale = false;
 
-  if (event.transaction.value > BigInt.fromI32(0)) {
-    phunkyApeTransfer.salePrice = event.transaction.value.toString();
-    phunkyApeTransfer.isSale = true;
-  }
-
   phunkyApeTransfer.from = event.params.from
   phunkyApeTransfer.to = event.params.to
   phunkyApeTransfer.phunkyApe = id;

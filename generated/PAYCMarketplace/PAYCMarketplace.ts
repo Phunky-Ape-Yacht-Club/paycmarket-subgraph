@@ -220,6 +220,22 @@ export class PAYCMarketplace__paycBidsResult {
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     return map;
   }
+
+  getHasBid(): boolean {
+    return this.value0;
+  }
+
+  getPaycIndex(): BigInt {
+    return this.value1;
+  }
+
+  getBidder(): Address {
+    return this.value2;
+  }
+
+  getValue(): BigInt {
+    return this.value3;
+  }
 }
 
 export class PAYCMarketplace__paycOfferedForSaleResult {
@@ -251,6 +267,26 @@ export class PAYCMarketplace__paycOfferedForSaleResult {
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromAddress(this.value4));
     return map;
+  }
+
+  getIsForSale(): boolean {
+    return this.value0;
+  }
+
+  getPaycIndex(): BigInt {
+    return this.value1;
+  }
+
+  getSeller(): Address {
+    return this.value2;
+  }
+
+  getMinValue(): BigInt {
+    return this.value3;
+  }
+
+  getOnlySellTo(): Address {
+    return this.value4;
   }
 }
 

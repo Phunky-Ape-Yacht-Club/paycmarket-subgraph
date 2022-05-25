@@ -15,10 +15,6 @@ export class PhunkyApe extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("minValue", Value.fromString(""));
-    this.set("currentOwner", Value.fromBytes(Bytes.empty()));
-    this.set("blockNumberListedForSale", Value.fromString(""));
   }
 
   save(): void {
@@ -27,8 +23,7 @@ export class PhunkyApe extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save PhunkyApe entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type PhunkyApe must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("PhunkyApe", id.toString(), this);
     }
@@ -56,13 +51,21 @@ export class PhunkyApe extends Entity {
     this.set("isForSale", Value.fromBoolean(value));
   }
 
-  get minValue(): string {
+  get minValue(): string | null {
     let value = this.get("minValue");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set minValue(value: string) {
-    this.set("minValue", Value.fromString(value));
+  set minValue(value: string | null) {
+    if (!value) {
+      this.unset("minValue");
+    } else {
+      this.set("minValue", Value.fromString(<string>value));
+    }
   }
 
   get currentOwner(): Bytes {
@@ -74,13 +77,21 @@ export class PhunkyApe extends Entity {
     this.set("currentOwner", Value.fromBytes(value));
   }
 
-  get blockNumberListedForSale(): string {
+  get blockNumberListedForSale(): string | null {
     let value = this.get("blockNumberListedForSale");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set blockNumberListedForSale(value: string) {
-    this.set("blockNumberListedForSale", Value.fromString(value));
+  set blockNumberListedForSale(value: string | null) {
+    if (!value) {
+      this.unset("blockNumberListedForSale");
+    } else {
+      this.set("blockNumberListedForSale", Value.fromString(<string>value));
+    }
   }
 
   get phunkyApeTransfers(): Array<string> {
@@ -106,11 +117,6 @@ export class PhunkyApeTransfer extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("blockNumber", Value.fromString(""));
-    this.set("from", Value.fromBytes(Bytes.empty()));
-    this.set("to", Value.fromBytes(Bytes.empty()));
-    this.set("phunkyApe", Value.fromString(""));
   }
 
   save(): void {
@@ -119,8 +125,7 @@ export class PhunkyApeTransfer extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save PhunkyApeTransfer entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type PhunkyApeTransfer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("PhunkyApeTransfer", id.toString(), this);
     }
@@ -141,13 +146,21 @@ export class PhunkyApeTransfer extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get blockNumber(): string {
+  get blockNumber(): string | null {
     let value = this.get("blockNumber");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set blockNumber(value: string) {
-    this.set("blockNumber", Value.fromString(value));
+  set blockNumber(value: string | null) {
+    if (!value) {
+      this.unset("blockNumber");
+    } else {
+      this.set("blockNumber", Value.fromString(<string>value));
+    }
   }
 
   get isSale(): boolean {
@@ -208,11 +221,6 @@ export class Bid extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("bidAmount", Value.fromString(""));
-    this.set("blockNumber", Value.fromString(""));
-    this.set("phunkyApe", Value.fromString(""));
-    this.set("from", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -221,8 +229,7 @@ export class Bid extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Bid entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Bid must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Bid", id.toString(), this);
     }
@@ -250,13 +257,21 @@ export class Bid extends Entity {
     this.set("bidAmount", Value.fromString(value));
   }
 
-  get blockNumber(): string {
+  get blockNumber(): string | null {
     let value = this.get("blockNumber");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set blockNumber(value: string) {
-    this.set("blockNumber", Value.fromString(value));
+  set blockNumber(value: string | null) {
+    if (!value) {
+      this.unset("blockNumber");
+    } else {
+      this.set("blockNumber", Value.fromString(<string>value));
+    }
   }
 
   get phunkyApe(): string {
