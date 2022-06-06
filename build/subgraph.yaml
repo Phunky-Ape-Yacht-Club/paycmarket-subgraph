@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: PAYCMarketplace
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0xd2d69f530dd343eaa0bbc03ddd099cef0855da52"
+      address: "0x08ab54b38436b81e6fc1fa37aa6f3fa2ddb73ccc"
       abi: PAYCMarketplace
-      startBlock: 9918715
+      startBlock: 13896439
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -45,11 +45,11 @@ dataSources:
       file: PAYCMarketplace/PAYCMarketplace.wasm
   - kind: ethereum
     name: PAYC
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0xC3C412164822C42F94D14F61620921d22ecbc621"
+      address: "0x176e0fe17314def59f0f06e976e1b74203be4a55"
       abi: PAYC
-      startBlock: 9910016
+      startBlock: 13896439
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
